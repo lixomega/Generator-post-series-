@@ -1,0 +1,110 @@
+<div style="background-color: #000; color: #fff; padding: 20px; border-radius: 8px; font-family: Arial, sans-serif;">
+  <div style="margin-bottom: 15px;">
+    <label style="display: block; margin-bottom: 5px;">Thumbnail Image URL:</label>
+    <input type="text" id="imageUrl" style="width: 100%; padding: 8px; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px;" placeholder="Masukkan URL gambar thumbnail" required>
+  </div>
+  
+  <div style="margin-bottom: 15px;">
+    <label style="display: block; margin-bottom: 5px;">Sinopsis:</label>
+    <textarea id="sinopsis" style="width: 100%; height: 100px; padding: 8px; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px;" placeholder="Masukkan sinopsis series" required></textarea>
+  </div>
+  
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+    <div>
+      <label style="display: block; margin-bottom: 5px;">Author:</label>
+      <input type="text" id="author" style="width: 100%; padding: 8px; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px;" placeholder="Nama author" required>
+    </div>
+    <div>
+      <label style="display: block; margin-bottom: 5px;">Tahun Rilis:</label>
+      <input type="text" id="release" style="width: 100%; padding: 8px; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px;" placeholder="Tahun rilis" required>
+    </div>
+    <div>
+      <label style="display: block; margin-bottom: 5px;">Artist:</label>
+      <input type="text" id="artist" style="width: 100%; padding: 8px; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px;" placeholder="Nama artist" required>
+    </div>
+    <div>
+      <label style="display: block; margin-bottom: 5px;">Studio:</label>
+      <input type="text" id="studio" style="width: 100%; padding: 8px; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px;" placeholder="Nama studio" required>
+    </div>
+  </div>
+  
+  <div style="margin-bottom: 15px;">
+    <label style="display: block; margin-bottom: 5px;">Judul Series:</label>
+    <input type="text" id="seriesTitle" style="width: 100%; padding: 8px; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px;" placeholder="Judul series" required>
+  </div>
+  
+  <button onclick="generateCode()" style="background: #444; color: #fff; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; margin-right: 10px;">Generate Code</button>
+  <button id="copyButton" onclick="copyCode()" style="background: #777; color: #ccc; border: none; padding: 10px 15px; border-radius: 4px; cursor: not-allowed;" disabled>Salin Hasil</button>
+  
+  <div style="margin-top: 20px;">
+    <label style="display: block; margin-bottom: 5px;">Hasil:</label>
+    <textarea id="outputCode" style="width: 100%; height: 200px; padding: 8px; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px; resize: none;" readonly></textarea>
+  </div>
+  
+  <p id="errorMessage" style="color: #ff6b6b; margin-top: 10px; display: none;">Harap isi semua field terlebih dahulu!</p>
+</div>
+
+<script>
+function generateCode() {
+  const imageUrl = document.getElementById('imageUrl').value;
+  const sinopsis = document.getElementById('sinopsis').value;
+  const author = document.getElementById('author').value;
+  const release = document.getElementById('release').value;
+  const artist = document.getElementById('artist').value;
+  const studio = document.getElementById('studio').value;
+  const seriesTitle = document.getElementById('seriesTitle').value;
+  const errorMessage = document.getElementById('errorMessage');
+  
+  if (!imageUrl || !sinopsis || !author || !release || !artist || !studio || !seriesTitle) {
+    errorMessage.style.display = 'block';
+    return;
+  }
+  
+  errorMessage.style.display = 'none';
+  
+  const generatedCode = `<!-- Thumbnail Here -->
+<div class="separator" style="clear: both;"><a href="${imageUrl}" style="display: block; padding: 1em 0; text-align: center; "><img alt="" border="0" data-original-height="366" data-original-width="256" src="${imageUrl}"/></a></div>
+
+<!-- Sinopsis here -->  
+<p id="syn_bod" style="white-space: pre-wrap" class="p-4 bg-white/10 rounded-lg">${sinopsis}
+</p>
+
+<!-- Information here -->  
+<span id="tauther">${author}</span><!-- Auther Name -->
+<span id="trelease">${release}</span><!-- year released -->
+<span id="tartist">${artist}</span><!-- Artist Name -->
+<span id="tstudio">${studio}</span><!-- Studio Name -->
+
+<!-- Chapter List --> 
+<div class="chapter_get" data-labelchapter="${seriesTitle}"></div>`;
+  
+  document.getElementById('outputCode').value = generatedCode;
+  
+  const copyButton = document.getElementById('copyButton');
+  copyButton.style.backgroundColor = "#555";
+  copyButton.style.color = "#fff";
+  copyButton.style.cursor = "pointer";
+  copyButton.disabled = false;
+}
+
+function copyCode() {
+  const outputCode = document.getElementById('outputCode');
+  const copyButton = document.getElementById('copyButton');
+  
+  if (!outputCode.value) {
+    return;
+  }
+  
+  outputCode.select();
+  document.execCommand('copy');
+  
+  const originalText = copyButton.textContent;
+  copyButton.textContent = "Tersalin!";
+  copyButton.style.backgroundColor = "#4CAF50";
+  
+  setTimeout(function() {
+    copyButton.textContent = originalText;
+    copyButton.style.backgroundColor = "#555";
+  }, 2000);
+}
+</script>
